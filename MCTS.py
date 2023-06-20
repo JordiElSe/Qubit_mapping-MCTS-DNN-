@@ -8,11 +8,11 @@ EPS = 1e-8
 
 log = logging.getLogger(__name__)
 #Set the logging level to INFO
-log.setLevel(logging.DEBUG)
+log.setLevel(logging.INFO)
 
 # Create a console handler
 ch = logging.StreamHandler(sys.stdout)
-ch.setLevel(logging.DEBUG)
+ch.setLevel(logging.INFO)
 
 # Create a formatter
 formatter = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
@@ -43,8 +43,7 @@ class MCTS:
             self.search(s,0, visited_states)
             
             
-            #log.debug(f'After simulation {i}:\n Qsa values are:\n {self.Qsa}\n Nsa values are:\n {self.Nsa}\n Ns values are:\n {self.Ns}')
-            #Pause executino until user presses continue
+            log.debug(f'After simulation {i}:\n Qsa values are:\n {self.Qsa}\n Nsa values are:\n {self.Nsa}\n Ns values are:\n {self.Ns}')
 
         end_time= time.time()
         log.info(f"Time taken for simulation {i}: {end_time-start_time}")
@@ -92,7 +91,6 @@ class MCTS:
         
         if self.args['maxDepth'] == cur_depth:
             circuit = self.game.getMatrixFromMapping(s)
-            #self.Ps[s], _ = self.nnet.predict(circuit)
             v = self.game.getTerminalValue(s)
             self.Ns[s] += 1
             log.debug(f'Maximum depth reached at node {s}. Terminal value {v}.')

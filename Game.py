@@ -1,10 +1,6 @@
 from qiskit import transpile, QuantumCircuit
 import numpy as np
 import random
-""" from qiskit.circuit import Parameter, Measure
-from qiskit.transpiler import Target, InstructionProperties
-from qiskit.circuit.library import CXGate, UGate
-import networkx as nx """
 from qiskit.circuit import ClassicalRegister, QuantumCircuit, CircuitInstruction, Reset
 from qiskit.circuit.library import standard_gates
 from qiskit.circuit.exceptions import CircuitError

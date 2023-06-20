@@ -7,11 +7,6 @@ import h5py
 from Game import Game
 from NNet import NNet
 import sys
-""" import random
-from qiskit.circuit import Parameter, Measure
-from qiskit.transpiler import Target, InstructionProperties
-from qiskit.circuit.library import CXGate, UGate
-import networkx as nx """
 
 
 
@@ -40,13 +35,7 @@ class Trainer:
         Executes one game of self-play until the end
         '''
         training_examples = []
-        #mapping = game.getSabreMapping()
         mapping = game.getTrivialMapping()
-        """ for i in range(self.args['initialPositions']):
-            if i == self.args['initialPositions'] - 1:
-                mapping = game.getSabreMapping()
-            else: """
-        #mapping = game.getRandomMapping()
         move = 0
         mcts = MCTS(game, nn, self.args)
         game_states = [mapping]
@@ -74,25 +63,6 @@ class Trainer:
                 log.debug(f'Game Over. Chosen actions: {actions}. Terminal depth: {game.getDepth(mapping)}')
                 game.setCustomMapping(mapping)
                 return training_examples
-                """ log.debug('According to the MCTS the best solution is:')
-                for i in range(0,len(trajectory)-2,2):
-                    log.debug(f'From {trajectory[i]} taking action {trajectory[i+1]} -> {trajectory[i+2]} terminal value: {game.getTerminalValue(trajectory[i+2])}')
-                log.debug('According to the NN the best solution is:')
-                mapping = trajectory[0]
-                input_nn = game.getMatrixFromMapping(mapping)
-                nn.train(training_examples, game)
-                pi, v = nn.predict(input_nn)
-                for _ in range (self.args['maxMoves']):
-                    action = np.argmax(pi)
-                    if action == game.getActionSize()-1:
-                        log.debug(f'From {mapping} chosen action is do nothing with probability {pi[action]} -> Game Over with terminal value: {game.getTerminalValue(mapping)}')
-                        break
-                    log.debug(f'From {mapping} with a predicted value {v} taking action {action} with probability {pi[action]} -> {game.getNextState(mapping, action)} terminal value: {game.getTerminalValue(game.getNextState(mapping, action))}')
-                    mapping = game.getNextState(mapping, action)
-                    input_nn = game.getMatrixFromMapping(mapping)
-                    pi, v = nn.predict(input_nn)
-                break """
-        #return training_examples       
 
     def learn(self):
         '''
@@ -124,50 +94,6 @@ class Trainer:
                 nn.train(training_examples, g)
                 self.storeTrainingExamples(training_examples, episode=j+1, iteration=i)
                 nn.save_checkpoint(folder=self.args['checkpoint'])
-                """ for _ in range (2):
-                    sabre_mapping = g.getSabreMapping()
-                    sabre_input = g.getMatrixFromMapping(sabre_mapping)
-                    sabre_pi, sabre_v = nn.predict(sabre_input)
-                    print(f'With SABRE the depth is: {g.original_depth} and the values is {sabre_v}')
-                    for _ in range (self.args['maxDepth']):
-                        action = np.argmax(sabre_pi)
-                        print(f'Selecting action {action} with probability {sabre_pi[action]}')
-                        if action == g.getActionSize()-1:
-                            break
-                        sabre_mapping = g.getNextState(sabre_mapping, action)
-                        sabre_input = g.getMatrixFromMapping(sabre_mapping)
-                        sabre_pi, sabre_v = nn.predict(sabre_input)
-                    print(f'With the NN and starting from SABRE the depth is: {g.getTerminalValue(sabre_mapping)} and the values is {sabre_v}')
-
-                    
-                    trivial_mapping = g.getTrivialMapping()
-                    trivial_input = g.getMatrixFromMapping(trivial_mapping)
-                    trivial_pi, trivial_v = nn.predict(trivial_input)
-                    print(f'With the trivial mapping the depth is: {g.original_depth} and the values is {trivial_v}')
-                    for _ in range (self.args['maxDepth']):
-                        action = np.argmax(trivial_pi)
-                        print(f'Selecting action {action} with probability {trivial_pi[action]}')
-                        if action == g.getActionSize()-1:
-                            break
-                        trivial_mapping = g.getNextState(trivial_mapping, action)
-                        trivial_input = g.getMatrixFromMapping(trivial_mapping)
-                        trivial_pi, trivial_v = nn.predict(trivial_input)
-                    print(f'With the NN and starting from the trivial mapping the depth is: {g.getTerminalValue(trivial_mapping)} and the values is {trivial_v}')
-                    
-                    random_mapping = g.getRandomMapping()
-                    random_input = g.getMatrixFromMapping(random_mapping)
-                    random_pi, random_v = nn.predict(random_input)
-                    print(f'With a random mapping the depth is: {g.original_depth} and the values is {random_v}')    
-                    for _ in range (self.args['maxDepth']):
-                        action = np.argmax(random_pi)
-                        print(f'Selecting action {action} with probability {random_pi[action]}')
-                        if action == g.getActionSize()-1:
-                            break
-                        random_mapping = g.getNextState(random_mapping, action)
-                        random_input = g.getMatrixFromMapping(random_mapping)
-                        random_pi, random_v = nn.predict(random_input)
-                    print(f'With the NN and starting from a random mapping the depth is: {g.getTerminalValue(random_mapping)} and the values is {random_v}')
-                input("Press Enter to continue...") """
         return nn
     
     def storeTrainingExamples(self, training_examples, episode, iteration):
