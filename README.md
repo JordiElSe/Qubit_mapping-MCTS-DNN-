@@ -13,10 +13,4 @@ python3 main.py
 The code is set to train for quantum circuits of 5 qubits and a 5 qubit processor named FakeAthensV2 from qiskit. This parameter and hyperparameters can be changed in the main.py file. If you want to train with randomly generated processors, use the function generate_random_non_directional_target() in the Trainer.py file.
 
 This code is inspired by:
-
-@misc{thakoor2016learning,
-  title={Learning to play othello without human knowledge},
-  author={Thakoor, Shantanu and Nair, Surag and Jhunjhunwala, Megha},
-  year={2016},
-  publisher={Stanford University, Final Project Report}
-}
+https://github.com/suragnair/alpha-zero-general/tree/master
